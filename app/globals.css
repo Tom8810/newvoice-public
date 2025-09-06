@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* デザインブリーフに基づいてカラートークンを更新 */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.35 0.01 258.34);
+  --card: oklch(0.98 0.01 342.55);
+  --card-foreground: oklch(0.35 0.01 258.34);
+  --popover: oklch(0.98 0.01 342.55);
+  --popover-foreground: oklch(0.35 0.01 258.34);
+  --primary: oklch(0.45 0.22 348.89);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.65 0.25 330.43);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.45 0.01 258.34);
+  --accent: oklch(0.65 0.25 330.43);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.93 0 0);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.45 0.22 348.89 / 0.5);
+  --chart-1: oklch(0.45 0.22 348.89);
+  --chart-2: oklch(0.65 0.25 330.43);
+  --chart-3: oklch(0.6 0.2 25.85);
+  --chart-4: oklch(0.55 0.18 35.67);
+  --chart-5: oklch(0.58 0.2 20.45);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.35 0.01 258.34);
+  --sidebar-primary: oklch(0.45 0.22 348.89);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.65 0.25 330.43);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.93 0 0);
+  --sidebar-ring: oklch(0.45 0.22 348.89 / 0.5);
+  --font-manrope: "Manrope", sans-serif;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.65 0.25 330.43);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.65 0.25 330.43);
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.65 0.25 330.43 / 0.5);
+  --chart-1: oklch(0.65 0.25 330.43);
+  --chart-2: oklch(0.45 0.22 348.89);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.65 0.25 330.43);
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.65 0.25 330.43 / 0.5);
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* 横スクロールを完全に無効化 */
+    overflow-x: hidden;
+  }
+  html {
+    /* HTMLレベルでも横スクロールを無効化 */
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  /* モバイルでの横スクロール防止 */
+  .prevent-horizontal-scroll {
+    overflow-x: hidden !important;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-x: none;
+  }
+
+  /* シンプルな無限スクロールアニメーション */
+  @keyframes marquee-simple {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .animate-marquee-simple {
+    animation: marquee-simple 15s linear infinite;
+  }
+}
+
+/* 無限スクロール用スタイル */
+@layer utilities {
+  .c-text {
+    @apply overflow-hidden flex w-full;
+  }
+
+  .c-text__item {
+    @apply shrink-0 whitespace-nowrap;
+    white-space: pre;
+
+    /* 奇数番目のアイテム */
+    &:nth-child(odd) {
+      .c-text:not(.no-tick) & {
+        animation: MoveLeft var(--tick-duration, 24s) var(--tick-delay, -12s)
+          infinite linear;
+      }
+    }
+
+    /* 偶数番目のアイテム */
+    &:nth-child(even) {
+      .c-text:not(.no-tick) & {
+        animation: MoveLeft2 var(--tick-duration, 24s) infinite linear;
+      }
+    }
+  }
+
+  @keyframes MoveLeft {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes MoveLeft2 {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-200%);
+    }
+  }
+}
