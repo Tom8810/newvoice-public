@@ -258,6 +258,7 @@ export function AudioPlayerProvider({ children }: AudioPlayerProviderProps) {
         error: null,
         isLoading: autoPlay,
         nextNewsId: null, // 自動遷移のローディング状態をリセット
+        playbackRate: 1.0, // 新しい音声は1.0xで開始
       }));
 
       if (audioRef.current) {
@@ -265,6 +266,7 @@ export function AudioPlayerProvider({ children }: AudioPlayerProviderProps) {
 
         // 自動再生の場合のみ音声データを取得
         if (autoPlay) {
+          audio.playbackRate = 1.0; // audio要素の再生速度もリセット
           let audioSrc = news.audioUrl;
 
           try {
@@ -349,6 +351,7 @@ export function AudioPlayerProvider({ children }: AudioPlayerProviderProps) {
           }
         } else {
           // autoPlay=falseの場合は音声データを取得せず、preload="metadata"を設定するだけ
+          audio.playbackRate = 1.0; // audio要素の再生速度もリセット
           audio.removeAttribute("src");
           audio.load();
         }
@@ -422,12 +425,14 @@ export function AudioPlayerProvider({ children }: AudioPlayerProviderProps) {
         error: null,
         isLoading: true,
         nextNewsId: null, // 念のため再度リセット
+        playbackRate: 1.0, // 新しい音声は1.0xで開始
         // クリック音状態は既にplayClickSoundでfalseに設定済み
       }));
 
       if (audioRef.current) {
         const audio = audioRef.current;
         audio.currentTime = 0; // audio要素の時間もリセット
+        audio.playbackRate = 1.0; // audio要素の再生速度もリセット
         let audioSrc = news.audioUrl;
 
         try {
